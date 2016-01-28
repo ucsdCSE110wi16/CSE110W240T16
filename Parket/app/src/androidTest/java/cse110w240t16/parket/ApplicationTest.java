@@ -1,4 +1,4 @@
-package ray.parket;
+package cse110w240t16.parket;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
