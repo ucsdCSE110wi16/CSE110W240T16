@@ -1,13 +1,13 @@
 <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:weightSum="1">
 
         <EditText
@@ -30,8 +30,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="388dp"
-        android:layout_height="468dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         tools:context="cse110w240t16.parket.MapsActivity" />
 
 </LinearLayout>
