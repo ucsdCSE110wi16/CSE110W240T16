@@ -16,6 +16,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +64,10 @@ public class MapsActivity extends FragmentActivity
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
+                int PLACE_PICKER_REQUEST = 1;
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
+//                startActivityForResult(builder.build(place), PLACE_PICKER_REQUEST);
             }
 
             @Override
