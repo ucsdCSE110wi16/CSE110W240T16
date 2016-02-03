@@ -66,7 +66,7 @@ public class MapsActivity extends FragmentActivity
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
 
-        mMap.setMyLocationEnabled(true);
+//        mMap.setMyLocationEnabled(true);
     }
 
     protected void onStart() {
@@ -82,7 +82,7 @@ public class MapsActivity extends FragmentActivity
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
     }
 
