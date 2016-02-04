@@ -10,29 +10,22 @@
         android:layout_height="wrap_content"
         android:weightSum="1">
 
-        <!--<EditText-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/sTextField"-->
-            <!--android:layout_weight="1"-->
-            <!--android:hint="Search for a nearby parking lot" />-->
-
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="Search"-->
-            <!--android:id="@+id/sButton" />-->
-
-        <fragment
-            android:id="@+id/place_autocomplete_fragment"
-            android:layout_width="match_parent"
+        <EditText
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            />
+            android:id="@+id/sTextField"
+            android:layout_weight="1"
+            android:hint="Search for a nearby parking lot" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Search"
+            android:id="@+id/sButton" />
 
     </LinearLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+   <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
