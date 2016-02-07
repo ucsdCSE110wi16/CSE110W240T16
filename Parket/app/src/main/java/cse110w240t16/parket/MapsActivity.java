@@ -22,11 +22,9 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
-<<<<<<< HEAD
-=======
 import com.google.android.gms.location.places.Places;
->>>>>>> f48b3320e11457e5b34c9c5e708f0da764006566
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +45,6 @@ public class MapsActivity extends FragmentActivity
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClint;
     private Location mLastLocation;
-    public static final String TAG = MapsActivity.class.getSimpleName();
 
     public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
@@ -75,32 +72,19 @@ public class MapsActivity extends FragmentActivity
         }
 
 
-        /*** Test ***/
+        // Autocomplete widget
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-<<<<<<< HEAD
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName());
-//                int PLACE_PICKER_REQUEST = 1;
-//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//
-//                startActivityForResult(builder.build(MapsActivity), PLACE_PICKER_REQUEST);
-            }
+        // Filter for parking lots
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS)
+                .build();
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-=======
+        autocompleteFragment.setFilter(typeFilter);
+
         autocompleteFragment.setOnPlaceSelectedListener(this);
->>>>>>> f48b3320e11457e5b34c9c5e708f0da764006566
-        /*** End Test ***/
+
     }
 
 

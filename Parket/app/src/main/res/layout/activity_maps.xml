@@ -13,11 +13,7 @@
         <fragment
             android:id="@+id/place_autocomplete_fragment"
             android:layout_width="match_parent"
-<<<<<<< HEAD
-            android:layout_height="match_parent"
-=======
             android:layout_height="wrap_content"
->>>>>>> f48b3320e11457e5b34c9c5e708f0da764006566
             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
 
         <!--<EditText-->
@@ -26,15 +22,6 @@
             <!--android:id="@+id/sTextField"-->
             <!--android:layout_weight="1"-->
             <!--android:hint="Search for a nearby parking lot" />-->
-<<<<<<< HEAD
-
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="Search"-->
-            <!--android:id="@+id/sButton" />-->
-=======
->>>>>>> f48b3320e11457e5b34c9c5e708f0da764006566
 
         <!--<Button-->
             <!--android:layout_width="wrap_content"-->
