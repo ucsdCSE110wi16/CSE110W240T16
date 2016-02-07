@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,24 +20,33 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.BitSet;
 import java.util.List;
 import java.util.jar.Manifest;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener{
+        implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, PlaceSelectionListener{
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClint;
     private Location mLastLocation;
+
+    public static final float ZOOM = (float)15.2;
+    public static final String TAG = MapsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +57,26 @@ public class MapsActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
         // Create a GoogleApiClient instance
         if (mGoogleApiClint == null){
             mGoogleApiClint = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
                 .build();
         }
+
+
+        /*** Test ***/
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+        /*** End Test ***/
     }
 
 
@@ -71,12 +93,8 @@ public class MapsActivity extends FragmentActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        //LatLng current = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
-
         mMap.setMyLocationEnabled(true);
+
     }
 
     protected void onStart() {
@@ -94,6 +112,8 @@ public class MapsActivity extends FragmentActivity
     public void onConnected(Bundle connectionHint) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
+        // display current location when start
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
     }
 
     @Override
@@ -107,6 +127,20 @@ public class MapsActivity extends FragmentActivity
     }
 
 
+    @Override
+    public void onPlaceSelected(Place place) {
+
+        // move the camera to the selected place and put a marker
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
+        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+        
+        Log.i(TAG, "Place: " + place.getName());
+    }
+
+    @Override
+    public void onError(Status status) {
+        Log.i(TAG, "An error occurred: " + status);
+    }
 }
 
 
