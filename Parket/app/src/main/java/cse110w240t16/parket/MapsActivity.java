@@ -23,6 +23,10 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
+<<<<<<< HEAD
+=======
+import com.google.android.gms.location.places.Places;
+>>>>>>> f48b3320e11457e5b34c9c5e708f0da764006566
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,11 +42,14 @@ import java.util.List;
 import java.util.jar.Manifest;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener{
+        implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, PlaceSelectionListener{
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClint;
     private Location mLastLocation;
+    public static final String TAG = MapsActivity.class.getSimpleName();
+
+    public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
 
     @Override
@@ -54,12 +61,16 @@ public class MapsActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
         // Create a GoogleApiClient instance
         if (mGoogleApiClint == null){
             mGoogleApiClint = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
                 .build();
         }
 
@@ -68,6 +79,7 @@ public class MapsActivity extends FragmentActivity
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
+<<<<<<< HEAD
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -85,6 +97,9 @@ public class MapsActivity extends FragmentActivity
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
+=======
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+>>>>>>> f48b3320e11457e5b34c9c5e708f0da764006566
         /*** End Test ***/
     }
 
@@ -102,12 +117,8 @@ public class MapsActivity extends FragmentActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        //LatLng current = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
-
         mMap.setMyLocationEnabled(true);
+
     }
 
     protected void onStart() {
@@ -125,6 +136,8 @@ public class MapsActivity extends FragmentActivity
     public void onConnected(Bundle connectionHint) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
+        // display current location when start
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
     }
 
     @Override
@@ -138,6 +151,20 @@ public class MapsActivity extends FragmentActivity
     }
 
 
+    @Override
+    public void onPlaceSelected(Place place) {
+
+        // move the camera to the selected place and put a marker
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
+        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+        
+        Log.i(TAG, "Place: " + place.getName());
+    }
+
+    @Override
+    public void onError(Status status) {
+        Log.i(TAG, "An error occurred: " + status);
+    }
 }
 
 
