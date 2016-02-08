@@ -10,13 +10,32 @@
         android:layout_height="wrap_content"
         android:weightSum="1"> -->
 
-        <fragment
-            android:id="@+id/place_autocomplete_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
 
-        <!--<EditText-->
+        <fragment
+                android:id="@+id/place_autocomplete_fragment"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_weight="0.35" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick a place"
+            android:id="@+id/button"
+            android:contextClickable="false"
+            android:onClick="buttonOnClick"
+            android:layout_weight="0.65"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <!--<EditText-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="match_parent"-->
             <!--android:id="@+id/sTextField"-->
@@ -31,7 +50,7 @@
 
    <!-- </LinearLayout> -->
 
-   <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
@@ -39,5 +58,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         tools:context="cse110w240t16.parket.MapsActivity" />
+
+
 
 </LinearLayout>
