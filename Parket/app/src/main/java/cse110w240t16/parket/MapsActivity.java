@@ -1,9 +1,12 @@
 package cse110w240t16.parket;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.net.Uri;
+import android.preference.DialogPreference;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -180,11 +183,33 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onPlaceSelected(Place place) {
 
+        /* Check String */
+        String tempName = (String) place.getName();
+        if (tempName.contains("parking")||tempName.contains("Parking")){
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
+            mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+
+            Log.i(TAG, "Place: " + place.getName());
+        }
+        else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Please Choose A Parking Lot From The List");
+            alert.setCancelable(false).setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alert.create();
+            alert.show();
+        }
+
+
         // move the camera to the selected place and put a marker
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
-        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
-        
-        Log.i(TAG, "Place: " + place.getName());
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
+//        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+//
+//        Log.i(TAG, "Place: " + place.getName());
     }
 
     @Override
