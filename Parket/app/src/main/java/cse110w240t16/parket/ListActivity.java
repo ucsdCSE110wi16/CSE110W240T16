@@ -23,6 +23,7 @@ public class ListActivity extends Activity{
             public void onClick(View v) {
                 Intent myIntent = new Intent(v.getContext(), DetailActivity.class);
                 startActivityForResult(myIntent, 0);
+                finish();
             }
         });
     }
