@@ -40,6 +40,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
@@ -47,8 +48,9 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.jar.Manifest;
 
-public class MapsActivity extends FragmentActivity
-        implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, PlaceSelectionListener{
+public class MapsActivity extends FragmentActivity implements
+        OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener,
+        PlaceSelectionListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClint;
@@ -85,8 +87,7 @@ public class MapsActivity extends FragmentActivity
         // Autocomplete widget
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-
+        autocompleteFragment.setHint("Search For A Parking Lot");
         autocompleteFragment.setOnPlaceSelectedListener(this);
 
     }
@@ -119,9 +120,11 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+//        mMap.setMyLocationEnabled(true);
 
-        mMap.setMyLocationEnabled(true);
-
+        /* Marker And Window Listener */
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
     }
 
     protected void onStart() {
@@ -163,10 +166,10 @@ public class MapsActivity extends FragmentActivity
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+        //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
         // display current location when start
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
     }
 
     @Override
@@ -183,18 +186,24 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onPlaceSelected(Place place) {
 
-        /* Check String */
-        String tempName = (String) place.getName();
-        if (tempName.contains("parking")||tempName.contains("Parking")){
+        /* Check the type of the selected place */
+        List<Integer> placeTypes = place.getPlaceTypes();
+        boolean parking = false;
+        for(int placeType: placeTypes){
+            if(placeType==70) parking = true;   //parking lot is represented as 70 in Place Class
+        }
+        if(parking){
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
-            mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+            mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
+                    title((String) place.getName()).
+                    snippet("Click Here For More Details"));
 
             Log.i(TAG, "Place: " + place.getName());
         }
         else {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Please Choose A Parking Lot From The List");
-            alert.setCancelable(false).setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+            alert.setCancelable(false).setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -203,13 +212,18 @@ public class MapsActivity extends FragmentActivity
             alert.create();
             alert.show();
         }
+    }
 
 
-        // move the camera to the selected place and put a marker
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
-//        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
-//
-//        Log.i(TAG, "Place: " + place.getName());
+    @Override
+    public boolean onMarkerClick(Marker marker){
+        marker.showInfoWindow();
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker){
+        Toast.makeText(this,"Window Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -217,5 +231,3 @@ public class MapsActivity extends FragmentActivity
         Log.i(TAG, "An error occurred: " + status);
     }
 }
-
-
