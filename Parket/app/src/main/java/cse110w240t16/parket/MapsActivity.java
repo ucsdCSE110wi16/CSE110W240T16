@@ -224,6 +224,12 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onInfoWindowClick(Marker marker){
         Toast.makeText(this,"Window Clicked", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
+        String reference = mMarkerPlaceLink.get(marker.getId());
+        intent.putExtra("reference", reference);
+        // Starting the Place Details Activity
+        startActivity(intent);
     }
 
     @Override
