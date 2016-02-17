@@ -4,12 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
 
-   <!-- <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1"> -->
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -18,37 +12,29 @@
         android:weightSum="1">
 
         <fragment
-                android:id="@+id/place_autocomplete_fragment"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:id="@+id/place_autocomplete_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
             android:layout_weight="0.35" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Pick a place"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Or Use Current Location"
             android:id="@+id/button"
             android:contextClickable="false"
             android:onClick="buttonOnClick"
             android:layout_weight="0.65"
             android:singleLine="true" />
     </LinearLayout>
-
-    <!--<EditText-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/sTextField"-->
-            <!--android:layout_weight="1"-->
-            <!--android:hint="Search for a nearby parking lot" />-->
-
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="Search"-->
-            <!--android:id="@+id/sButton" />-->
-
-   <!-- </LinearLayout> -->
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"

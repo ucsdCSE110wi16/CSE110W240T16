@@ -3,6 +3,7 @@ package cse110w240t16.parket;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -43,6 +44,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 
 import java.util.BitSet;
 import java.util.List;
@@ -50,7 +53,7 @@ import java.util.jar.Manifest;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener,
-        PlaceSelectionListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+        PlaceSelectionListener, OnMarkerClickListener, OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClint;
@@ -89,7 +92,6 @@ public class MapsActivity extends FragmentActivity implements
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("Search For A Parking Lot");
         autocompleteFragment.setOnPlaceSelectedListener(this);
-
     }
 
     /** find location from Place Picker Widget */
@@ -106,7 +108,6 @@ public class MapsActivity extends FragmentActivity implements
             e.printStackTrace();
         }
     }
-
 
     /**
      * Manipulates the map once available.
@@ -182,7 +183,6 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
-
     @Override
     public void onPlaceSelected(Place place) {
 
@@ -214,7 +214,6 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
-
     @Override
     public boolean onMarkerClick(Marker marker){
         marker.showInfoWindow();
@@ -225,8 +224,8 @@ public class MapsActivity extends FragmentActivity implements
     public void onInfoWindowClick(Marker marker){
         Toast.makeText(this,"Window Clicked", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
-        String reference = mMarkerPlaceLink.get(marker.getId());
+        Intent intent = new Intent(getBaseContext(), DetailActivity.class);
+        String reference = marker.getId();
         intent.putExtra("reference", reference);
         // Starting the Place Details Activity
         startActivity(intent);
