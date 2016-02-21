@@ -59,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleApiClient mGoogleApiClint;
     private Location mLastLocation;
     private Marker marker;
+    private boolean once = false;
 
     public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
@@ -133,8 +134,6 @@ public class MapsActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClint.connect();
-        if (mLastLocation != null)
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -174,7 +173,10 @@ public class MapsActivity extends FragmentActivity implements
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
         // display current location when start
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+        if (!once) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+            once = true;
+        }
     }
 
     @Override
