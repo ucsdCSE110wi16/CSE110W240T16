@@ -28,12 +28,12 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Or Use Current Location"
+            android:text="Or Explore Nearby Places"
             android:id="@+id/button"
             android:contextClickable="false"
-            android:onClick="buttonOnClick"
             android:layout_weight="0.65"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:onClick="placePickerOnClick" />
     </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

@@ -88,7 +88,6 @@ public class MapsActivity extends FragmentActivity implements
                     .addApi(AppIndex.API).build();
         }
 
-
         // Autocomplete widget
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -96,11 +95,10 @@ public class MapsActivity extends FragmentActivity implements
         autocompleteFragment.setOnPlaceSelectedListener(this);
     }
 
-    /** find location from Place Picker Widget */
-    public void buttonOnClick(View v) {
+    /* Find Location From Place Picker Widget */
+    public void placePickerOnClick(View v) {
         // place picker
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException e) {
@@ -124,7 +122,6 @@ public class MapsActivity extends FragmentActivity implements
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).visible(false));
-
 
         /* Marker And Window Listener */
         mMap.setOnMarkerClickListener(this);
@@ -174,7 +171,8 @@ public class MapsActivity extends FragmentActivity implements
 
         // display current location when start
         if (!once) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(),
+                                                                            mLastLocation.getLongitude()), ZOOM));
             once = true;
         }
     }
@@ -189,6 +187,7 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+    /* After Selecting A Place From AutoComplete */
     @Override
     public void onPlaceSelected(Place place) {
 
@@ -197,7 +196,7 @@ public class MapsActivity extends FragmentActivity implements
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
             marker.setPosition(place.getLatLng());
             marker.setTitle((String) place.getName());
-            marker.setSnippet("Click here for More Details");
+            marker.setSnippet("Click Here For More Details");
             marker.setVisible(true);
             /*mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
                     title((String) place.getName()).
@@ -219,16 +218,17 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
+    /* After Clicking Marker */
     @Override
     public boolean onMarkerClick(Marker marker){
         marker.showInfoWindow();
         return false;
     }
 
+    /* After Clicking Info Window */
     @Override
     public void onInfoWindowClick(Marker marker){
-        Toast.makeText(this,"Parking Location Selected", Toast.LENGTH_SHORT).show();
-
+        //Toast.makeText(this,"Parking Location Selected", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getBaseContext(), DetailActivity.class);
         String reference = marker.getId();
         intent.putExtra("reference", reference);
@@ -241,13 +241,14 @@ public class MapsActivity extends FragmentActivity implements
         Log.i(TAG, "An error occurred: " + status);
     }
 
+    /* After Selecting A Place From Place Picker */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
                 if (place.getPlaceTypes().contains(70) || place.getName().toString().toLowerCase().contains("parking")) {
-                    String toastMsg = String.format("Place: %s", place.getName());
-                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                    //String toastMsg = String.format("Place: %s", place.getName());
+                    //Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
                     marker.setPosition(place.getLatLng());
                     marker.setTitle((String) place.getName());
@@ -255,8 +256,16 @@ public class MapsActivity extends FragmentActivity implements
                     marker.setVisible(true);
                 }
                 else {
-                    String toastMsg = String.format("Selected Place is not a Parking Lot.");
-                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setTitle("Please Choose A Parking Lot From The List");
+                    alert.setCancelable(false).setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.create();
+                    alert.show();
                 }
             }
         }
