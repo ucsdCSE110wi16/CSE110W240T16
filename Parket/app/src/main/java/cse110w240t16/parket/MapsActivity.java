@@ -31,7 +31,6 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -60,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements
     private Location mLastLocation;
     private Marker marker;
     private boolean once = false;
+    private String placeID;
 
     public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
@@ -201,8 +201,7 @@ public class MapsActivity extends FragmentActivity implements
             /*mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
                     title((String) place.getName()).
                     snippet("Click Here For More Details"));*/
-
-            Log.i(TAG, "Place: " + place.getName());
+            placeID = place.getId();
         }
         else {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -228,10 +227,9 @@ public class MapsActivity extends FragmentActivity implements
     /* After Clicking Info Window */
     @Override
     public void onInfoWindowClick(Marker marker){
-        //Toast.makeText(this,"Parking Location Selected", Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent(getBaseContext(), DetailActivity.class);
-        String reference = marker.getId();
-        intent.putExtra("reference", reference);
+        intent.putExtra("placeID", placeID);
         // Starting the Place Details Activity
         startActivity(intent);
     }
@@ -247,8 +245,6 @@ public class MapsActivity extends FragmentActivity implements
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
                 if (place.getPlaceTypes().contains(70) || place.getName().toString().toLowerCase().contains("parking")) {
-                    //String toastMsg = String.format("Place: %s", place.getName());
-                    //Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
                     marker.setPosition(place.getLatLng());
                     marker.setTitle((String) place.getName());
