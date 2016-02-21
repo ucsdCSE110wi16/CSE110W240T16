@@ -39,8 +39,8 @@
 
         </activity>
         <activity
-            android:name=".DetailActivity"
-            android:label="@string/title_activity_maps">
+            android:name=".DetailActivity">
+            <!--android:label="@string/title_activity_maps">-->
         </activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->

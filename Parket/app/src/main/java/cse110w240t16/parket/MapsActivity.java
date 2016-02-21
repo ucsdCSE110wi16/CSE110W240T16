@@ -71,7 +71,6 @@ public class MapsActivity extends FragmentActivity implements
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
         // Create a GoogleApiClient instance
         if (mGoogleApiClint == null) {
             // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
@@ -121,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-//        mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
 
         /* Marker And Window Listener */
         mMap.setOnMarkerClickListener(this);
@@ -167,10 +166,10 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
         // display current location when start
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
     }
 
     @Override
@@ -212,6 +211,26 @@ public class MapsActivity extends FragmentActivity implements
             alert.create();
             alert.show();
         }
+
+        /* Check the string */
+//        String tempName = (String) place.getName();
+//        if(tempName.contains("parking") || tempName.contains("Parking")){
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
+//            mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+//            Log.i(TAG, "Place: " + place.getName());
+//        }
+//        else {
+//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//            alert.setTitle("Please Choose A Parking Lot From The List");
+//            alert.setCancelable(false).setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.cancel();
+//                }
+//            });
+//            alert.create();
+//            alert.show();
+//        }
     }
 
     @Override
