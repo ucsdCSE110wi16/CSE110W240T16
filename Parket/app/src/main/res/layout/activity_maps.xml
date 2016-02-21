@@ -25,15 +25,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:weightSum="1">
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Or Explore Nearby Places"
+            android:text="Or Explore Nearby Parking Lots"
             android:id="@+id/button"
             android:contextClickable="false"
+            android:onClick="placePickerOnClick"
             android:layout_weight="0.65"
-            android:singleLine="true"
-            android:onClick="placePickerOnClick" />
+            android:singleLine="true" />
     </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

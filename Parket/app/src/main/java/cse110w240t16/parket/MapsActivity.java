@@ -198,6 +198,7 @@ public class MapsActivity extends FragmentActivity implements
             marker.setTitle((String) place.getName());
             marker.setSnippet("Click Here For More Details");
             marker.setVisible(true);
+            marker.hideInfoWindow();
             /*mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
                     title((String) place.getName()).
                     snippet("Click Here For More Details"));*/
@@ -250,6 +251,8 @@ public class MapsActivity extends FragmentActivity implements
                     marker.setTitle((String) place.getName());
                     marker.setSnippet("Click here for More Details");
                     marker.setVisible(true);
+                    marker.hideInfoWindow();
+                    placeID = place.getId();
                 }
                 else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
