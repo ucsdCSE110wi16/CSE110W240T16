@@ -16,13 +16,6 @@ public class DetailActivity extends Activity {
 
     }
 
-//    @Override
-    public void onBackPressed() {
 
-//        Intent intent = new Intent(this, ListActivity.class);
-//        startActivity(intent);
-        System.out.println("Back");
-        finish();
-    }
 }
 

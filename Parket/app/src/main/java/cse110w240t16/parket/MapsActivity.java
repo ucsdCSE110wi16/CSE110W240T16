@@ -73,7 +73,6 @@ public class MapsActivity extends FragmentActivity implements
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
         // Create a GoogleApiClient instance
         if (mGoogleApiClint == null) {
             // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
@@ -125,6 +124,7 @@ public class MapsActivity extends FragmentActivity implements
         mMap.setMyLocationEnabled(true);
         marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).visible(false));
 
+
         /* Marker And Window Listener */
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
@@ -174,7 +174,7 @@ public class MapsActivity extends FragmentActivity implements
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
         // display current location when start
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
     }
 
     @Override
