@@ -58,9 +58,11 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClint;
     private Location mLastLocation;
+    private Marker marker;
 
     public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
+    public static final int PLACE_PICKER_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,6 @@ public class MapsActivity extends FragmentActivity implements
     /** find location from Place Picker Widget */
     public void buttonOnClick(View v) {
         // place picker
-        int PLACE_PICKER_REQUEST = 1;
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         try {
@@ -121,7 +122,8 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-//        mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
+        marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).visible(false));
 
         /* Marker And Window Listener */
         mMap.setOnMarkerClickListener(this);
@@ -131,6 +133,8 @@ public class MapsActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClint.connect();
+        if (mLastLocation != null)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -167,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
 
         // display current location when start
         //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
@@ -175,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        mGoogleApiClint.connect();
+        //mGoogleApiClint.connect();
     }
 
     @Override
@@ -187,16 +191,15 @@ public class MapsActivity extends FragmentActivity implements
     public void onPlaceSelected(Place place) {
 
         /* Check the type of the selected place */
-        List<Integer> placeTypes = place.getPlaceTypes();
-        boolean parking = false;
-        for(int placeType: placeTypes){
-            if(placeType==70) parking = true;   //parking lot is represented as 70 in Place Class
-        }
-        if(parking){
+        if(place.getPlaceTypes().contains(70)|| place.getName().toString().toLowerCase().contains("parking")){
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
-            mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
+            marker.setPosition(place.getLatLng());
+            marker.setTitle((String) place.getName());
+            marker.setSnippet("Click here for More Details");
+            marker.setVisible(true);
+            /*mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
                     title((String) place.getName()).
-                    snippet("Click Here For More Details"));
+                    snippet("Click Here For More Details"));*/
 
             Log.i(TAG, "Place: " + place.getName());
         }
@@ -222,7 +225,7 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker){
-        Toast.makeText(this,"Window Clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Parking Location Selected", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(getBaseContext(), DetailActivity.class);
         String reference = marker.getId();
@@ -234,5 +237,26 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onError(Status status) {
         Log.i(TAG, "An error occurred: " + status);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(this, data);
+                if (place.getPlaceTypes().contains(70) || place.getName().toString().toLowerCase().contains("parking")) {
+                    String toastMsg = String.format("Place: %s", place.getName());
+                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
+                    marker.setPosition(place.getLatLng());
+                    marker.setTitle((String) place.getName());
+                    marker.setSnippet("Click here for More Details");
+                    marker.setVisible(true);
+                }
+                else {
+                    String toastMsg = String.format("Selected Place is not a Parking Lot.");
+                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }
