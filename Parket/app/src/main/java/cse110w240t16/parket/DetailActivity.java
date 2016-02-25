@@ -43,6 +43,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
     private Location mLastLocation;
     private String placeID;
     private String parseID;
+    private String string_avail;
     public static final String TAG = DetailActivity.class.getSimpleName();
 
     @Override
@@ -69,7 +70,11 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
             @Override
             public void done(ParseObject object, com.parse.ParseException e){
                 if (e == null) {
-                    Log.i(TAG, "Place Retrieved From Parse");
+                    string_avail = object.getString("availability");
+                    if(string_avail == null){
+                        string_avail = "Empty";
+                    }
+                    Log.i(TAG, "Place Retrieved From Parse: " + object.getString("name"));
                 } else {
                     Log.i(TAG, "Retrieved Error");
                 }
@@ -92,12 +97,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                             name.setText(myPlace.getName());
                             address.setText(myPlace.getAddress());
                             distance.setText(myPlace.getPhoneNumber());
-
-//                            String placeName = (String)myPlace.getName();
-//                            ParseObject placeObject = new ParseObject("Place");
-//                            placeObject.put("name", placeName);
-//                            placeObject.saveInBackground();
-
+                            availability.setText(string_avail);
                             Log.i(TAG, "Place found: " + myPlace.getName());
                         } else {
                             Log.e(TAG, "Place not found");

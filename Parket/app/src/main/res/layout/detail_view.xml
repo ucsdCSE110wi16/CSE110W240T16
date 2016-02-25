@@ -21,7 +21,6 @@
             android:width="100dp"
             android:visibility="visible"
             android:textSize="25dp"
-            android:layout_gravity="center_horizontal"
             android:layout_weight="0.38" />
 
     </LinearLayout>

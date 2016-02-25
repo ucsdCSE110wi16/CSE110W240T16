@@ -281,7 +281,7 @@ public class MapsActivity extends FragmentActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(this, data);
+                final Place place = PlacePicker.getPlace(this, data);
                 if (place.getPlaceTypes().contains(70) || place.getName().toString().toLowerCase().contains("parking")) {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
                     marker.setPosition(place.getLatLng());
@@ -290,6 +290,30 @@ public class MapsActivity extends FragmentActivity implements
                     marker.setVisible(true);
                     marker.hideInfoWindow();
                     placeID = place.getId();
+
+                    /* Parse */
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Place").
+                            whereEqualTo("placeID", placeID).
+                            setLimit(3);
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                        public void done(ParseObject object, ParseException e) {
+
+                            /* Create a new parse object */
+                            if (object == null) {
+                                ParseObject placeObject = new ParseObject("Place");
+                                placeObject.put("placeID", placeID);
+                                placeObject.put("name", place.getName());
+                                placeObject.saveInBackground();
+                                parseID = placeObject.getObjectId();
+                                Log.i(TAG, "Place Not In Parse. Created");
+                            }
+                            /* This place exists */
+                            else {
+                                parseID = object.getObjectId();
+                                Log.i(TAG, "Place Exists In Parse.");
+                            }
+                        }
+                    });
                 }
                 else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
