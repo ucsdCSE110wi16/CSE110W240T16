@@ -27,6 +27,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.text.ParseException;
 
 /**
  * Created by XiaoyuePu on 2/4/16.
@@ -36,6 +42,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
     private GoogleApiClient mGoogleApiClint;
     private Location mLastLocation;
     private String placeID;
+    private String parseID;
     public static final String TAG = DetailActivity.class.getSimpleName();
 
     @Override
@@ -56,11 +63,24 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                     .addApi(AppIndex.API).build();
         }
 
+        parseID = getIntent().getStringExtra("parseID");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
+        query.getInBackground(parseID, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, com.parse.ParseException e){
+                if (e == null) {
+                    Log.i(TAG, "Place Retrieved From Parse");
+                } else {
+                    Log.i(TAG, "Retrieved Error");
+                }
+            }
+        });
+
         final TextView name = (TextView) findViewById(R.id.textName);
         final TextView address = (TextView) findViewById(R.id.textAddress);
         final TextView distance = (TextView) findViewById(R.id.textDistance);
         final TextView time = (TextView) findViewById(R.id.textTime);
-        TextView availability = (TextView) findViewById(R.id.textAvail);
+        final TextView availability = (TextView) findViewById(R.id.textAvail);
 
         placeID = getIntent().getStringExtra("placeID");
         Places.GeoDataApi.getPlaceById(mGoogleApiClint, placeID)
@@ -72,6 +92,12 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                             name.setText(myPlace.getName());
                             address.setText(myPlace.getAddress());
                             distance.setText(myPlace.getPhoneNumber());
+
+//                            String placeName = (String)myPlace.getName();
+//                            ParseObject placeObject = new ParseObject("Place");
+//                            placeObject.put("name", placeName);
+//                            placeObject.saveInBackground();
+
                             Log.i(TAG, "Place found: " + myPlace.getName());
                         } else {
                             Log.e(TAG, "Place not found");

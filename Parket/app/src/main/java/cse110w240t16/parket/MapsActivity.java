@@ -45,6 +45,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.BitSet;
 import java.util.List;
@@ -59,7 +64,9 @@ public class MapsActivity extends FragmentActivity implements
     private Location mLastLocation;
     private Marker marker;
     private boolean once = false;
+    private boolean parseInit = false;
     private String placeID;
+    private String parseID;
 
     public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
@@ -93,6 +100,12 @@ public class MapsActivity extends FragmentActivity implements
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("Search For A Parking Lot");
         autocompleteFragment.setOnPlaceSelectedListener(this);
+
+        //Initialize Parse ONLY ONCE
+        if(!parseInit){
+            Parse.initialize(this);
+            parseInit = true;
+        }
     }
 
     /* Find Location From Place Picker Widget */
@@ -179,17 +192,16 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        //mGoogleApiClint.connect();
+        mGoogleApiClint.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     /* After Selecting A Place From AutoComplete */
     @Override
-    public void onPlaceSelected(Place place) {
+    public void onPlaceSelected(final Place place) {
 
         /* Check the type of the selected place */
         if(place.getPlaceTypes().contains(70)|| place.getName().toString().toLowerCase().contains("parking")){
@@ -199,10 +211,34 @@ public class MapsActivity extends FragmentActivity implements
             marker.setSnippet("Click Here For More Details");
             marker.setVisible(true);
             marker.hideInfoWindow();
+            placeID = place.getId();
             /*mMap.addMarker(new MarkerOptions().position(place.getLatLng()).
                     title((String) place.getName()).
                     snippet("Click Here For More Details"));*/
-            placeID = place.getId();
+
+            /* Parse */
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Place").
+                                            whereEqualTo("placeID", placeID).
+                                            setLimit(3);
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                public void done(ParseObject object, ParseException e) {
+
+                    /* Create a new parse object */
+                    if (object == null) {
+                        ParseObject placeObject = new ParseObject("Place");
+                        placeObject.put("placeID", placeID);
+                        placeObject.put("name", place.getName());
+                        placeObject.saveInBackground();
+                        parseID = placeObject.getObjectId();
+                        Log.i(TAG, "Place Not In Parse. Created");
+                    }
+                    /* This place exists */
+                    else {
+                        parseID = object.getObjectId();
+                        Log.i(TAG, "Place Exists In Parse.");
+                    }
+                }
+            });
         }
         else {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -231,6 +267,7 @@ public class MapsActivity extends FragmentActivity implements
 
         Intent intent = new Intent(getBaseContext(), DetailActivity.class);
         intent.putExtra("placeID", placeID);
+        intent.putExtra("parseID", parseID);
         // Starting the Place Details Activity
         startActivity(intent);
     }

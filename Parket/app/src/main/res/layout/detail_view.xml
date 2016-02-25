@@ -13,10 +13,16 @@
         android:weightSum="1">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
             android:text="Place Detail"
-            android:id="@+id/detailViewTitle" />
+            android:id="@+id/detailViewTitle"
+            android:typeface="serif"
+            android:width="100dp"
+            android:visibility="visible"
+            android:textSize="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.38" />
 
     </LinearLayout>
 
@@ -39,7 +45,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="40dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -116,6 +122,5 @@
         android:layout_alignTop="@+id/placeAvail"
         android:layout_alignLeft="@+id/textAddress"
         android:layout_alignStart="@+id/textAddress" />
-
 
 </RelativeLayout>
