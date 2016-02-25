@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Parket</string>
     <string name="title_activity_maps">Map</string>
+
+    <string-array name="option_array">
+        <item>Full</item>
+        <item>Almost Full</item>
+        <item>Empty</item>
+    </string-array>
+
 </resources>
