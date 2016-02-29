@@ -71,6 +71,8 @@ public class MapsActivity extends FragmentActivity implements
     public static final float ZOOM = (float)15.2;
     public static final String TAG = MapsActivity.class.getSimpleName();
     public static final int PLACE_PICKER_REQUEST = 1;
+    public static float mLng;
+    public static float mLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +183,8 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onConnected(Bundle connectionHint) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+        mLat = (float) mLastLocation.getLatitude();
+        mLng = (float) mLastLocation.getLongitude();
 
         // display current location when start
         if (!once) {

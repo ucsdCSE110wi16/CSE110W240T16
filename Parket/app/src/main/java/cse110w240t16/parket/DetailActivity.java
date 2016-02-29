@@ -27,6 +27,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.maps.model.LatLngBounds;
+
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -40,7 +41,6 @@ import java.text.ParseException;
 public class DetailActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClint;
-    private Location mLastLocation;
     private String placeID;
     private String parseID;
     private String string_avail;
@@ -96,7 +96,10 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                             final Place myPlace = places.get(0);
                             name.setText(myPlace.getName());
                             address.setText(myPlace.getAddress());
-                            distance.setText(myPlace.getPhoneNumber());
+                            float[] result = new float[1];
+                            Location.distanceBetween(MapsActivity.mLat, MapsActivity.mLng, myPlace.getLatLng().latitude, myPlace.getLatLng().longitude, result);
+                            distance.setText(Float.toString(result[0]/1000) + " km");
+                            time.setText(Float.toString(result[0]/1000/40*60) + " min via driving");
                             availability.setText(string_avail);
                             Log.i(TAG, "Place found: " + myPlace.getName());
                         } else {
@@ -145,9 +148,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
-    }
+    public void onConnected(Bundle connectionHint){}
 
     @Override
     public void onConnectionSuspended(int i) {
