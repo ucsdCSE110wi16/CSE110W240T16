@@ -20,6 +20,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.graphics.Typeface;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -31,6 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -45,6 +49,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -135,12 +140,35 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);
+        //mMap.setMyLocationEnabled(true);
         marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).visible(false));
 
         /* Marker And Window Listener */
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                View popup = getLayoutInflater().inflate(R.layout.info_window, null);
+
+                TextView infoTitle = (TextView) popup.findViewById(R.id.txtInfoWindowTitle);
+                infoTitle.setText(marker.getTitle());
+
+                TextView contents = (TextView) popup.findViewById(R.id.txtInfoWindowEventType);
+                contents.setText(marker.getSnippet());
+                Typeface mytypeface1 = Typeface.createFromAsset(getAssets(), "OptimusPrincepsSemiBold.ttf");
+                Typeface mytypeface2 = Typeface.createFromAsset(getAssets(), "OptimusPrinceps.ttf");
+                infoTitle.setTypeface(mytypeface1);
+                contents.setTypeface(mytypeface2);
+
+                return (popup);
+            }
+        });
     }
 
     protected void onStart() {
@@ -182,16 +210,16 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
-        mLat = (float) mLastLocation.getLatitude();
-        mLng = (float) mLastLocation.getLongitude();
+       // mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+       // mLat = (float) mLastLocation.getLatitude();
+       // mLng = (float) mLastLocation.getLongitude();
 
         // display current location when start
-        if (!once) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(),
-                                                                            mLastLocation.getLongitude()), ZOOM));
-            once = true;
-        }
+        //if (!once) {
+          //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(),
+            //                                                                mLastLocation.getLongitude()), ZOOM));
+           // once = true;
+        //}
     }
 
     @Override
