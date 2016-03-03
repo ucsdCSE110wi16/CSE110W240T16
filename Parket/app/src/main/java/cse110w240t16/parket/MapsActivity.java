@@ -55,6 +55,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.BitSet;
 import java.util.List;
@@ -257,11 +258,21 @@ public class MapsActivity extends FragmentActivity implements
 
                     /* Create a new parse object */
                     if (object == null) {
-                        ParseObject placeObject = new ParseObject("Place");
+                        final ParseObject placeObject = new ParseObject("Place");
                         placeObject.put("placeID", placeID);
                         placeObject.put("name", place.getName());
-                        placeObject.saveInBackground();
-                        parseID = placeObject.getObjectId();
+                        placeObject.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    parseID = placeObject.getObjectId();
+                                    System.out.println("ParseID in MapsActivity is: " + parseID);
+                                    Log.i(TAG, "Saved Succesfully To Parse");
+                                } else {
+                                    Log.i(TAG, "Not Saved Succesfully To Parse");
+                                }
+                            }
+                        });
                         Log.i(TAG, "Place Not In Parse. Created");
                     }
                     /* This place exists */
@@ -337,12 +348,12 @@ public class MapsActivity extends FragmentActivity implements
                                 placeObject.put("name", place.getName());
                                 placeObject.saveInBackground();
                                 parseID = placeObject.getObjectId();
-                                Log.i(TAG, "Place Not In Parse. Created");
+                                Log.i(TAG, "Place Not On Parse. Created");
                             }
                             /* This place exists */
                             else {
                                 parseID = object.getObjectId();
-                                Log.i(TAG, "Place Exists In Parse.");
+                                Log.i(TAG, "Place Exists On Parse.");
                             }
                         }
                     });

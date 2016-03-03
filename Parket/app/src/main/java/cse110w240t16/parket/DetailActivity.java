@@ -7,8 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -32,13 +36,14 @@ import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import java.text.ParseException;
 
 /**
  * Created by XiaoyuePu on 2/4/16.
  */
-public class DetailActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener{
+public class DetailActivity extends FragmentActivity implements ConnectionCallbacks,
+                                                                OnConnectionFailedListener,
+                                                                OnItemSelectedListener{
 
     private GoogleApiClient mGoogleApiClint;
     private String placeID;
@@ -65,6 +70,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
         }
 
         parseID = getIntent().getStringExtra("parseID");
+        System.out.println("Parse ID In Detail is: " + parseID);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
         query.getInBackground(parseID, new GetCallback<ParseObject>() {
             @Override
@@ -72,11 +78,15 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                 if (e == null) {
                     string_avail = object.getString("availability");
                     if(string_avail == null){
-                        string_avail = "Empty";
+                        string_avail = "No Availability";
+                        Log.i(TAG, "No Availability");
+                    }
+                    else{
+                        Log.i(TAG, "Have Availability On Parse: " + string_avail);
                     }
                     Log.i(TAG, "Place Retrieved From Parse: " + object.getString("name"));
                 } else {
-                    Log.i(TAG, "Retrieved Error");
+                    Log.i(TAG, "Retrieved Error From Parse");
                 }
             }
         });
@@ -86,6 +96,8 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
         final TextView distance = (TextView) findViewById(R.id.textDistance);
         final TextView time = (TextView) findViewById(R.id.textTime);
         final TextView availability = (TextView) findViewById(R.id.textAvail);
+        Spinner spinner = (Spinner) findViewById(R.id.option_spinner);
+        spinner.setOnItemSelectedListener(this);
 
         placeID = getIntent().getStringExtra("placeID");
         Places.GeoDataApi.getPlaceById(mGoogleApiClint, placeID)
@@ -101,9 +113,9 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                             distance.setText(Float.toString(result[0]/1000) + " km");
                             time.setText(Float.toString(result[0]/1000/40*60) + " min via driving");
                             availability.setText(string_avail);
-                            Log.i(TAG, "Place found: " + myPlace.getName());
+                            Log.i(TAG, "Place found From Google: " + myPlace.getName());
                         } else {
-                            Log.e(TAG, "Place not found");
+                            Log.e(TAG, "Place not found From Google");
                         }
                         places.release();
                     }
@@ -148,7 +160,8 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
     }
 
     @Override
-    public void onConnected(Bundle connectionHint){}
+    public void onConnected(Bundle connectionHint){
+    }
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -157,5 +170,31 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        final String item = parent.getItemAtPosition(position).toString();
+
+        if(!item.contains("Please Select A Status")) {
+            // Showing selected spinner item
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
+            query.getInBackground(parseID, new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, com.parse.ParseException e) {
+                    if (e == null) {
+                        object.put("availability", item);
+                        object.saveInBackground();
+                    } else {
+                        Log.i(TAG, "Saved Error");
+                    }
+                }
+            });
+            Toast.makeText(parent.getContext(), "Availability Reported: " + item, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }

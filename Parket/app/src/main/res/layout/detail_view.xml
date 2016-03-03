@@ -22,7 +22,6 @@
             android:visibility="visible"
             android:textSize="25dp"
             android:layout_weight="0.38" />
-
     </LinearLayout>
 
     <TextView
@@ -118,18 +117,19 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/textAvail"
-        android:layout_alignTop="@+id/placeAvail"
         android:layout_alignLeft="@+id/textAddress"
-        android:layout_alignStart="@+id/textAddress" />
+        android:layout_alignStart="@+id/textAddress"
+        android:layout_alignTop="@+id/placeAvail" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/option_spinner"
-        android:layout_below="@+id/placeAvail"
         android:entries="@array/option_array"
-        android:layout_alignTop="@+id/placeAvail"
-        android:layout_alignLeft="@+id/textAddress"
-        android:layout_alignStart="@+id/textAddress" />/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/textAvail"
+        android:layout_alignStart="@+id/textAvail" />
 
 </RelativeLayout>
