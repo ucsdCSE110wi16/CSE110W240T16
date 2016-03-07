@@ -1,135 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="PLACE DETAILS"
+        android:id="@+id/textView1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:weightSum="1">
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <TextView
-            android:layout_width="96dp"
+            android:layout_width="117dp"
             android:layout_height="wrap_content"
-            android:text="Place Detail"
-            android:id="@+id/detailViewTitle"
-            android:typeface="serif"
-            android:width="100dp"
-            android:visibility="visible"
-            android:textSize="25dp"
-            android:layout_weight="0.38" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Name:"
+            android:id="@+id/textView2" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textName"
+            android:textSize="16dp"
+            android:textColor="#f2136fe0" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Address:"
+            android:id="@+id/textView" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textAddress"
+            android:textSize="16dp"
+            android:textColor="#f2136fe0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Distance"
+            android:id="@+id/textView5" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textDistance"
+            android:textSize="16dp"
+            android:textColor="#f2136fe0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:layout_width="114dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Travel Time:"
+            android:id="@+id/textView9" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textTime"
+            android:textSize="16dp"
+            android:textColor="#f2136fe0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Availability:"
+            android:id="@+id/textView7" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textAvail"
+            android:textSize="16dp"
+            android:textColor="#f2136fe0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Price:"
+            android:id="@+id/textView11" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textPrice"
+            android:textSize="16dp"
+            android:textColor="#f2136fe0" />
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:id="@+id/placeName"
-        android:layout_marginLeft="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_alignTop="@+id/textName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textName"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address"
-        android:id="@+id/placeAddress"
-        android:layout_marginTop="34dp"
-        android:layout_below="@+id/placeName"
-        android:layout_alignLeft="@+id/placeName"
-        android:layout_alignStart="@+id/placeName" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textAddress"
-        android:layout_alignTop="@+id/placeAddress"
-        android:layout_alignLeft="@+id/textName"
-        android:layout_alignStart="@+id/textName" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Distance"
-        android:id="@+id/placeDistance"
-        android:layout_marginTop="34dp"
-        android:layout_below="@+id/placeAddress"
-        android:layout_alignRight="@+id/placeAddress"
-        android:layout_alignEnd="@+id/placeAddress" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Travel Time"
-        android:id="@+id/placeTime"
-        android:layout_below="@+id/placeDistance"
-        android:layout_alignLeft="@+id/placeDistance"
-        android:layout_alignStart="@+id/placeDistance"
-        android:layout_marginTop="34dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Availability"
-        android:id="@+id/placeAvail"
-        android:layout_below="@+id/placeTime"
-        android:layout_alignLeft="@+id/placeTime"
-        android:layout_alignStart="@+id/placeTime"
-        android:layout_marginTop="34dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textDistance"
-        android:layout_alignTop="@+id/placeDistance"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textTime"
-        android:layout_above="@+id/placeAvail"
-        android:layout_alignLeft="@+id/textDistance"
-        android:layout_alignStart="@+id/textDistance"
-        android:layout_marginTop="34dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textAvail"
-        android:layout_alignLeft="@+id/textAddress"
-        android:layout_alignStart="@+id/textAddress"
-        android:layout_alignTop="@+id/placeAvail" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Report Availbility:"
+        android:id="@+id/textView3"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
 
     <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerAvail"
+        android:layout_gravity="center_horizontal"
+        android:spinnerMode="dropdown"
+        android:layout_marginBottom="10dp"
+        android:entries="@array/option_array"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Select Approximate Pricing ($/hour):"
+        android:id="@+id/textView4"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <NumberPicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/numberPicker"
+        android:layout_gravity="center_horizontal"
+        android:clickable="false" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/option_spinner"
-        android:entries="@array/option_array"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/textAvail"
-        android:layout_alignStart="@+id/textAvail" />
+        android:text="Report Pricing"
+        android:id="@+id/button2"
+        android:layout_gravity="center_horizontal|right"
+        android:onClick="buttonOnClick" />
 
-</RelativeLayout>
+</LinearLayout>

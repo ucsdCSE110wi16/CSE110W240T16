@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -43,13 +45,16 @@ import java.text.ParseException;
  */
 public class DetailActivity extends FragmentActivity implements ConnectionCallbacks,
                                                                 OnConnectionFailedListener,
-                                                                OnItemSelectedListener{
+                                                                OnItemSelectedListener,
+                                                                OnValueChangeListener{
 
     private GoogleApiClient mGoogleApiClint;
     private String placeID;
     private String parseID;
-    private String string_avail;
+    private String string_avail = "No Availbility Recorded";
+    private String string_price = "No Pricing Recorded";
     public static final String TAG = DetailActivity.class.getSimpleName();
+    protected static int pricing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,15 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                     else{
                         Log.i(TAG, "Have Availability On Parse: " + string_avail);
                     }
+
+                    int stored_price = object.getInt("Price");
+                    string_price = "$" + stored_price + "/hour";
+                    if(stored_price == 0){
+                        string_price = "Free";
+                    }
+                    else{
+                        Log.i(TAG, "Have Pricing On Parse: " + string_price);
+                    }
                     Log.i(TAG, "Place Retrieved From Parse: " + object.getString("name"));
                 } else {
                     Log.i(TAG, "Retrieved Error From Parse");
@@ -96,8 +110,14 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
         final TextView distance = (TextView) findViewById(R.id.textDistance);
         final TextView time = (TextView) findViewById(R.id.textTime);
         final TextView availability = (TextView) findViewById(R.id.textAvail);
-        Spinner spinner = (Spinner) findViewById(R.id.option_spinner);
-        spinner.setOnItemSelectedListener(this);
+        final TextView price = (TextView) findViewById(R.id.textPrice);
+        Spinner spinner_avail = (Spinner) findViewById(R.id.spinnerAvail);
+        spinner_avail.setOnItemSelectedListener(this);
+        NumberPicker np = (NumberPicker) findViewById(R.id.numberPicker);
+        np.setMinValue(0);
+        np.setMaxValue(50);
+        np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        np.setOnValueChangedListener(this);
 
         placeID = getIntent().getStringExtra("placeID");
         Places.GeoDataApi.getPlaceById(mGoogleApiClint, placeID)
@@ -113,6 +133,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                             distance.setText(Float.toString(result[0]/1000) + " km");
                             time.setText(Float.toString(result[0]/1000/40*60) + " min via driving");
                             availability.setText(string_avail);
+                            price.setText(string_price);
                             Log.i(TAG, "Place found From Google: " + myPlace.getName());
                         } else {
                             Log.e(TAG, "Place not found From Google");
@@ -196,5 +217,29 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        this.pricing = picker.getValue();
+        Log.i(TAG, "Value changed");
+    }
+
+    public void buttonOnClick(View v) {
+        Log.i(TAG,"Price buttion clicked");
+        //upload to parse
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
+        query.getInBackground(parseID, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, com.parse.ParseException e) {
+                if (e == null) {
+                    object.put("Price", DetailActivity.pricing);
+                    object.saveInBackground();
+                } else {
+                    Log.i(TAG, "Saved Error");
+                }
+            }
+        });
+        Toast.makeText(v.getContext(), "Pricing Reported: $" + DetailActivity.pricing + "/hour", Toast.LENGTH_LONG).show();
     }
 }

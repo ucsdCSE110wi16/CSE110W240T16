@@ -141,7 +141,7 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
         marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).visible(false));
 
         /* Marker And Window Listener */
@@ -211,16 +211,15 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-       // mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
-       // mLat = (float) mLastLocation.getLatitude();
-       // mLng = (float) mLastLocation.getLongitude();
+       mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClint);
+        mLat = (float) mLastLocation.getLatitude();
+        mLng = (float) mLastLocation.getLongitude();
 
         // display current location when start
-        //if (!once) {
-          //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(),
-            //                                                                mLastLocation.getLongitude()), ZOOM));
-           // once = true;
-        //}
+        if (!once) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), ZOOM));
+            once = true;
+        }
     }
 
     @Override
@@ -237,7 +236,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onPlaceSelected(final Place place) {
 
         /* Check the type of the selected place */
-        if(place.getPlaceTypes().contains(70)|| place.getName().toString().toLowerCase().contains("parking")){
+        if(place.getPlaceTypes().contains(70)|| place.getName().toString().toLowerCase().contains("parking") || place.getName().toString().toLowerCase().contains("lot")){
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
             marker.setPosition(place.getLatLng());
             marker.setTitle((String) place.getName());
@@ -325,7 +324,7 @@ public class MapsActivity extends FragmentActivity implements
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 final Place place = PlacePicker.getPlace(this, data);
-                if (place.getPlaceTypes().contains(70) || place.getName().toString().toLowerCase().contains("parking")) {
+                if (place.getPlaceTypes().contains(70) || place.getName().toString().toLowerCase().contains("parking") || place.getName().toString().toLowerCase().contains("lot")) {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), ZOOM));
                     marker.setPosition(place.getLatLng());
                     marker.setTitle((String) place.getName());
