@@ -51,10 +51,10 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
     private GoogleApiClient mGoogleApiClint;
     private String placeID;
     private String parseID;
-    private String string_avail = "No Availbility Recorded";
-    private String string_price = "No Pricing Recorded";
+    private String string_avail;
+    private String string_price;
     public static final String TAG = DetailActivity.class.getSimpleName();
-    protected static int pricing;
+    protected int pricing = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                 if (e == null) {
                     string_avail = object.getString("availability");
                     if(string_avail == null){
-                        string_avail = "No Availability";
+                        string_avail = "No Availability Recorded";
                         Log.i(TAG, "No Availability");
                     }
                     else{
@@ -91,13 +91,15 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                     }
 
                     int stored_price = object.getInt("Price");
+                    boolean reported = object.getBoolean("reported");
                     string_price = "$" + stored_price + "/hour";
                     if(stored_price == 0){
                         string_price = "Free";
                     }
-                    else{
-                        Log.i(TAG, "Have Pricing On Parse: " + string_price);
+                    if(!reported){
+                        string_price = "No Pricing Available";
                     }
+                    Log.i(TAG, "Have Pricing On Parse: " + string_price);
                     Log.i(TAG, "Place Retrieved From Parse: " + object.getString("name"));
                 } else {
                     Log.i(TAG, "Retrieved Error From Parse");
@@ -233,13 +235,14 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
             @Override
             public void done(ParseObject object, com.parse.ParseException e) {
                 if (e == null) {
-                    object.put("Price", DetailActivity.pricing);
+                    object.put("Price", pricing);
+                    object.put("reported", true);
                     object.saveInBackground();
                 } else {
                     Log.i(TAG, "Saved Error");
                 }
             }
         });
-        Toast.makeText(v.getContext(), "Pricing Reported: $" + DetailActivity.pricing + "/hour", Toast.LENGTH_LONG).show();
+        Toast.makeText(v.getContext(), "Pricing Reported: $" + pricing + "/hour", Toast.LENGTH_LONG).show();
     }
 }
