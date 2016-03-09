@@ -143,6 +143,7 @@ public class MapsActivity extends FragmentActivity implements
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).visible(false));
+        marker.setTitle("marker");
 
         /* Marker And Window Listener */
         mMap.setOnMarkerClickListener(this);

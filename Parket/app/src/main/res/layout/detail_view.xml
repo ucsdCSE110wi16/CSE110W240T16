@@ -127,7 +127,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/textAvail"
             android:textSize="16dp"
-            android:textColor="#f2136fe0" />
+            android:textColor="#f2136fe0"
+            android:contentDescription="availbility" />
     </LinearLayout>
 
     <LinearLayout
@@ -150,7 +151,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/textPrice"
             android:textSize="16dp"
-            android:textColor="#f2136fe0" />
+            android:textColor="#f2136fe0"
+            android:contentDescription="price" />
     </LinearLayout>
 
     <TextView

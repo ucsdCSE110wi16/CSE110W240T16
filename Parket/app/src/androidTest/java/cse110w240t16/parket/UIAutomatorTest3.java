@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
@@ -19,6 +20,7 @@ import android.support.test.uiautomator.Until;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import static android.os.SystemClock.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
@@ -26,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 
-public class UIAutomatorTest1 {
+public class UIAutomatorTest3 {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "cse110w240t16.parket";
@@ -61,54 +63,53 @@ public class UIAutomatorTest1 {
     }
 
     @Test
-    public void findParkingStructure() throws UiObjectNotFoundException {
-        UiObject button = mDevice.findObject(new UiSelector()
-                .text("Or Explore Nearby Parking Lots")
-                .className("android.widget.Button"));
+    public void testDetailedView() throws UiObjectNotFoundException {
+        UiObject autoCompleteFragment = mDevice.findObject(new UiSelector()
+                .text("Search For A Parking Lot")
+                .className("android.widget.EditText"));
 
-        if (button.exists()){
-            button.click();
+        if (autoCompleteFragment.exists()) {
+            autoCompleteFragment.click();
 
-            UiObject picker = mDevice.findObject(new UiSelector().textContains("place"));
-            assertEquals("Pick a place", picker.getText());
+            mDevice.pressKeyCode(KeyEvent.KEYCODE_H);
+            mDevice.pressKeyCode(KeyEvent.KEYCODE_O);
+            mDevice.pressKeyCode(KeyEvent.KEYCODE_P);
 
-            UiObject search = mDevice.findObject(new UiSelector().description("Search"));
-            if (search.exists()) {
-                search.click();
+            UiObject name = mDevice.findObject(new UiSelector()
+                    .index(1)
+                    .className("android.widget.RelativeLayout"));
 
-                UiObject type = mDevice.findObject(new UiSelector().text("Search"));
-                if (type.exists()){
-                    type.click();
-                    mDevice.pressKeyCode(KeyEvent.KEYCODE_P);
-                    mDevice.pressKeyCode(KeyEvent.KEYCODE_A);
-                    mDevice.pressKeyCode(KeyEvent.KEYCODE_N);
+            if (name.exists()) {
+                name.click();
 
-                    UiObject parking = mDevice.findObject(new UiSelector()
-                            .index(1)
-                            .className("android.widget.RelativeLayout"));
+                UiObject marker = mDevice.findObject(new UiSelector().index(0).className("android.view.View").clickable(false));
+                assertEquals("Hopkins Parking Structure. Click Here For More Details.", marker.getContentDescription());
 
-                    UiObject name = mDevice.findObject(new UiSelector().textContains("Pangea"));
-                    assertEquals("Pangea Parking Structure", name.getText());
+                SystemClock.sleep(9500);
 
-                    if (parking.exists()){
-                        parking.click();
+                marker.click();
 
-                        UiObject location = mDevice.findObject(new UiSelector().index(0)
-                                .className("android.widget.ImageView")
-                                .resourceId("com.google.android.gms:id/icon"));
+                mDevice.click(353, 533);
 
-                        if (location.exists()){
-                            location.click();
+                UiObject status = mDevice.findObject(new UiSelector().text("Please Select A Status"));
+                status.click();
+                UiObject select = mDevice.findObject(new UiSelector().className("android.widget.CheckedTextView").index(2));
+                assertEquals("Almost Full", select.getText());
+                select.click();
 
-                            UiObject marker = mDevice.findObject(new UiSelector().index(0).className("android.view.View").clickable(false));
-                            assertEquals("Pangea Parking Structure. Click here for More Details.", marker.getContentDescription());
-                        }
-                    }
-                }
+                UiObject scroll = mDevice.findObject(new UiSelector().index(1).className("android.widget.EditText"));
+                scroll.swipeUp(10);
+                scroll.swipeUp(10);
+                scroll.swipeUp(10);
+
+                SystemClock.sleep(5000);
+
+                UiObject report = mDevice.findObject(new UiSelector().index(11).className("android.widget.Button"));
+                assertEquals("Report Pricing", report.getText());
+                report.click();
+
             }
         }
-
-
     }
-
 }
+
