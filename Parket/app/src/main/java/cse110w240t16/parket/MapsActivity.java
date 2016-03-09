@@ -308,6 +308,7 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onInfoWindowClick(Marker marker){
 
+        Toast.makeText(this, "Loading...", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getBaseContext(), DetailActivity.class);
         intent.putExtra("placeID", placeID);
         intent.putExtra("parseID", parseID);

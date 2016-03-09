@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -106,6 +107,8 @@ public class DetailActivity extends FragmentActivity implements ConnectionCallba
                 }
             }
         });
+
+        SystemClock.sleep(5000);
 
         final TextView name = (TextView) findViewById(R.id.textName);
         final TextView address = (TextView) findViewById(R.id.textAddress);
