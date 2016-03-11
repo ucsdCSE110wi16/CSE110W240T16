@@ -26,6 +26,15 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 
+/**
+ * Scenario Test One: Place Picker
+ *
+ * Description: This scenario tests the Google Place Picker implementation of our app.
+ * When the application is launched, UIAutomator will select the place picker button right below
+ * the search bar. When place picker is launched, UIAutomator will use the keyboard and enter
+ * "PAN". Then, UIAutomator will select the first item from the drop down result. If there is no
+ * error, than it passes this test
+ */
 public class UIAutomatorTest1 {
 
     private static final String BASIC_SAMPLE_PACKAGE

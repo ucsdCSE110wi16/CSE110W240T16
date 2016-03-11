@@ -28,6 +28,16 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 
+/**
+ * Scenario Test Three
+ *
+ * Description: This scenario tests our implementation of user report system.
+ * When the app is lauched, UIAutomator will select the search bar and enter "HOP" using the
+ * keyboard. Then, it'll select the first item called "Hopkins Parking Structure". After a marker is
+ * displayed on the map, UIAutomator will click the marker, which brings the user to another view.
+ * UIAutomator will test the report system by opening the spinner, and selecting "Almost Full" option.
+ * If the actions terminates without any error, then it'll pass the test.
+ */
 public class UIAutomatorTest3 {
 
     private static final String BASIC_SAMPLE_PACKAGE

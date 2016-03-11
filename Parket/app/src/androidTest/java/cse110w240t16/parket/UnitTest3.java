@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
@@ -19,6 +20,7 @@ import android.support.test.uiautomator.Until;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import static android.os.SystemClock.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
@@ -27,17 +29,12 @@ import static org.junit.Assert.assertEquals;
 @SdkSuppress(minSdkVersion = 18)
 
 /**
- * Scenario Test Two
+ * Unit Test One
  *
- * Description: This scenario tests the Google Autocomplete implementation of our app.
- * When the application is launched, UIAutomator will select the search bar and wait for it to
- * respond. When the search bar is clicked, UIAutomator will use the keyboard and enter
- * "GIL". Then, UIAutomator will select the first item from the drop down result (which is not
- * a parking lot). Since the selected item is not a parking lot, our app needs to display a warning
- * message and asks the user to search again. If a warning window is displayed, then it passes this
- * test.
+ * Description: This unit test tests whether a marker will appear after selecting an item from the
+ * search bar.
  */
-public class UIAutomatorTest2 {
+public class UnitTest3 {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "cse110w240t16.parket";
@@ -72,7 +69,7 @@ public class UIAutomatorTest2 {
     }
 
     @Test
-    public void testAutocomplete() throws UiObjectNotFoundException {
+    public void showMarker() throws UiObjectNotFoundException {
         UiObject autoCompleteFragment = mDevice.findObject(new UiSelector()
                 .text("Search For A Parking Lot")
                 .className("android.widget.EditText"));
@@ -80,12 +77,9 @@ public class UIAutomatorTest2 {
         if (autoCompleteFragment.exists()) {
             autoCompleteFragment.click();
 
-            UiObject logo = mDevice.findObject(new UiSelector().index(2).className("android.widget.EditText"));
-            assertEquals("Search", logo.getText());
-
-            mDevice.pressKeyCode(KeyEvent.KEYCODE_G);
-            mDevice.pressKeyCode(KeyEvent.KEYCODE_I);
-            mDevice.pressKeyCode(KeyEvent.KEYCODE_L);
+            mDevice.pressKeyCode(KeyEvent.KEYCODE_H);
+            mDevice.pressKeyCode(KeyEvent.KEYCODE_O);
+            mDevice.pressKeyCode(KeyEvent.KEYCODE_P);
 
             UiObject name = mDevice.findObject(new UiSelector()
                     .index(1)
@@ -94,8 +88,8 @@ public class UIAutomatorTest2 {
             if (name.exists()) {
                 name.click();
 
-                UiObject popup = mDevice.findObject(new UiSelector().index(0).className("android.widget.TextView"));
-                assertEquals("Please Choose A Parking Lot From The List", popup.getText());
+                UiObject marker = mDevice.findObject(new UiSelector().index(0).className("android.view.View").clickable(false));
+                assertEquals("Hopkins Parking Structure. Click Here For More Details.", marker.getContentDescription());
             }
         }
     }
